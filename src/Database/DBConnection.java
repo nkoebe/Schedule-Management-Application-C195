@@ -31,6 +31,10 @@ public abstract class DBConnection {
         }
     }
 
+    public static Connection getConnection() {
+        return connection;
+    }
+
     public static void closeConnection() {
         try {
             connection.close();
@@ -38,6 +42,7 @@ public abstract class DBConnection {
         }
         catch(Exception e)
         {
+            //can change to do nothing per video
             System.out.println("Error:" + e.getMessage());
         }
     }
