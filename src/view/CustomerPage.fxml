@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<AnchorPane prefHeight="660.0" prefWidth="1038.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerPage">
+   <children>
+      <AnchorPane layoutX="8.0" layoutY="8.0" prefHeight="644.0" prefWidth="1021.0">
+         <children>
+            <BorderPane layoutX="27.0" layoutY="26.0" prefHeight="594.0" prefWidth="971.0">
+               <top>
+                  <AnchorPane prefHeight="565.0" prefWidth="971.0" style="-fx-border-color: black; -fx-border-radius: 10;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label layoutX="38.0" layoutY="33.0" prefHeight="17.0" prefWidth="190.0" text="Customer File Search" />
+                        <Label fx:id="nameLabel" layoutX="104.0" layoutY="68.0" text="Name:" />
+                        <TextField id="firstNameTF" fx:id="firstNameTF" layoutX="152.0" layoutY="64.0" prefHeight="25.0" prefWidth="253.0" promptText="Enter Full or Partial Name" />
+                        <Button id="searchButton" fx:id="searchButton" layoutX="702.0" layoutY="64.0" mnemonicParsing="false" onAction="#onSearchButton" prefHeight="25.0" prefWidth="123.0" text="Search" />
+                        <TableView id="searchTable" fx:id="searchTable" layoutX="33.0" layoutY="134.0" prefHeight="360.0" prefWidth="907.0">
+                          <columns>
+                            <TableColumn fx:id="nameColumn" prefWidth="247.0" text="Customer Name" />
+                            <TableColumn fx:id="idColumn" prefWidth="103.0" text="Customer ID" />
+                              <TableColumn fx:id="phoneColumn" prefWidth="220.0" text="Phone Number" />
+                              <TableColumn fx:id="addressColumn" prefWidth="336.0" text="Address" />
+                          </columns>
+                        </TableView>
+                        <Button fx:id="openFileButton" layoutX="216.0" layoutY="515.0" mnemonicParsing="false" onAction="#onOpenFileButton" text="Open Selected Patient File" />
+                        <Label layoutX="434.0" layoutY="68.0" prefHeight="17.0" prefWidth="79.0" text="Customer ID:" />
+                        <TextField fx:id="customerIdTF" layoutX="513.0" layoutY="64.0" prefHeight="25.0" prefWidth="118.0" promptText="Enter Customer ID" />
+                        <Button fx:id="addButton" layoutX="631.0" layoutY="515.0" mnemonicParsing="false" onAction="#onAddButton" text="Add New Customer" />
+                        <Button fx:id="viewScheduleButton" layoutX="415.0" layoutY="515.0" mnemonicParsing="false" onAction="#onViewButton" text="View Appointment Schedule" />
+                     </children>
+                  </AnchorPane>
+               </top>
+            </BorderPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
