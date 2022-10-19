@@ -37,6 +37,7 @@
                   </AnchorPane>
                </top>
             </BorderPane>
+            <Button fx:id="reportsButton" layoutX="458.0" layoutY="608.0" mnemonicParsing="false" onAction="#onReportsButton" text="Generate Reports" />
          </children>
       </AnchorPane>
    </children>

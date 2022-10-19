@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.TimeZone;
 
 import static javafx.application.Application.launch;
@@ -40,25 +41,9 @@ public class Main extends Application {
         //Locale.setDefault(new Locale("fr"));
 
         DBConnection.openConnection();
-
-
-        /* ZoneId localZoneId = ZoneId.systemDefault();
-        ZoneId otherZoneId = ZoneId.of(TimeZone.getDefault().getID());
-        System.out.println("local: " + localZoneId + " other: " + otherZoneId);
-
-
-        LocalTime startTime = LocalTime.of(9, 00);
-
-        for (Appointments a : DBAppointments.getAllAppointments()) {
-            System.out.println("To LDT: " + a.getStart().toLocalDateTime() + " getStart: " + a.getStart());
-        } */
-        //System.out.println(startTime.atOffset(ZoneOffset.of("America/New_York")));
-
-
         launch(args);
-
-
-
         DBConnection.closeConnection();
+
+
     }
 }

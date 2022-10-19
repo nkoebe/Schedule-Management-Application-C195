@@ -22,6 +22,8 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CustomerPage implements Initializable {
@@ -59,10 +61,23 @@ public class CustomerPage implements Initializable {
                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm a");
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("UPCOMING APPOINTMENT STARTS SOON");
-                alert.setContentText("You have an appointment starting at " + a.getStart().toLocalDateTime().toLocalTime().format(dtf) + ". Appointment ID: " + a.getApptId() + " Customer ID: " + a.getCustomerId());
+                alert.setContentText("You have an appointment today, " + a.getStart().toLocalDateTime().toLocalDate() + ", starting at " + a.getStart().toLocalDateTime().toLocalTime().format(dtf) + ". Appointment ID: " + a.getApptId() + " Customer ID: " + a.getCustomerId());
                 alert.showAndWait();
+                return;
            }
         }
+
+        //Lambda attempt since there is no passing to another controller
+        DBAppointments.getAllAppointments()
+                .stream()
+                .filter(a -> userId == a.getUserId() && LocalDateTime.now().isAfter(a.getStart().toLocalDateTime().minusMinutes(15)) && LocalDateTime.now().isBefore(a.getStart().toLocalDateTime()))
+                .forEach(a -> System.out.println("wtf"));
+
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("NO UPCOMING APPOINTMENTS");
+        alert.setContentText("You currently have no upcoming appointments within the next 15 minutes");
+        alert.showAndWait();
     }
 
     @FXML
@@ -70,15 +85,18 @@ public class CustomerPage implements Initializable {
 
         ObservableList<Customers> searchList = FXCollections.observableArrayList();
 
-        for (Customers c : allCustomers) {
+        /* for (Customers c : allCustomers) {
             if (!customerIdTF.getText().isEmpty() && c.getCustomerId() == Integer.parseInt(customerIdTF.getText())) {
                 searchList.add(c);
             }
             else if (!firstNameTF.getText().isEmpty() && c.getCustomerName().toLowerCase().contains(firstNameTF.getText().toLowerCase()) && customerIdTF.getText().isEmpty()) {
                 searchList.add(c);
             }
-        }
+        } */
 
+        //another lambda attempt THIS ONE WORKED LAMBDA #1
+        allCustomers.stream().filter(c -> !customerIdTF.getText().isEmpty() && c.getCustomerId() == Integer.parseInt(customerIdTF.getText())).forEach(c -> searchList.add(c));
+        allCustomers.stream().filter(c -> !firstNameTF.getText().isEmpty() && c.getCustomerName().toLowerCase().contains(firstNameTF.getText().toLowerCase()) && customerIdTF.getText().isEmpty()).forEach(c -> searchList.add(c));
 
         searchTable.setItems(searchList);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
@@ -91,15 +109,20 @@ public class CustomerPage implements Initializable {
     @FXML
     public void onOpenFileButton (ActionEvent actionEvent) throws IOException {
 
-        Customers chosenCustomer = null;
+        //Customers chosenCustomer = null;
 
-        for (Customers c : allCustomers) {
+        /* for (Customers c : allCustomers) {
             if (!searchTable.getSelectionModel().isEmpty() && searchTable.getSelectionModel().getSelectedItem().equals(c)){
                 chosenCustomer = c;
             }
-        }
+        } */
+
+        //chosenCustomer = allCustomers.stream().filter(c -> !searchTable.getSelectionModel().isEmpty() && searchTable.getSelectionModel().getSelectedItem().equals(c)).findFirst().get();
+
+        //LAMBDA #2 SUCCESS
 
         try {
+            Customers chosenCustomer = allCustomers.stream().filter(c -> !searchTable.getSelectionModel().isEmpty() && searchTable.getSelectionModel().getSelectedItem().equals(c)).findFirst().get();
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/view/SpecificCustomer.fxml"));
             loader.load();
@@ -114,6 +137,12 @@ public class CustomerPage implements Initializable {
             stage.show();
         }
         catch (NullPointerException nullPointerException) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("SELECTION ERROR");
+            alert.setContentText("Please select a Customer to view");
+            alert.showAndWait();
+        }
+        catch (NoSuchElementException noSuchElementException) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("SELECTION ERROR");
             alert.setContentText("Please select a Customer to view");
@@ -134,6 +163,19 @@ public class CustomerPage implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
 
+    }
+
+    @FXML
+    public void onReportsButton (ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ReportsPage.fxml"));
+        loader.load();
+
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Parent root = loader.getRoot();
+        stage.setTitle("Reports Page");
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     public void onViewButton (ActionEvent actionEvent) throws IOException {
