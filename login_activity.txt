@@ -1,5 +1,0 @@
-Log in Attempt at 2022-10-18 21:35:29.3261602. Username Entered: test Password Entered: test Log in Attempt was Successful.
-Log in Attempt at 2022-10-18 21:36:37.6602965. Username Entered: te Password Entered: teteeet Log in Attempt was Unsuccessful.
-Log in Attempt at 2022-10-18 21:44:23.5839585. Username Entered: gg Password Entered: ggg Log in Attempt was Unsuccessful.
-Log in Attempt at 2022-10-18 21:44:35.0322909. Username Entered: test Password Entered: test Log in Attempt was Successful.
-Log in Attempt at 2022-10-23 21:32:12.8825093. Username Entered: test Password Entered: test Log in Attempt was Successful.

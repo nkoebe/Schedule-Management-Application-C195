@@ -23,7 +23,7 @@
         <ComboBox fx:id="firstLevelCombo" layoutX="156.0" layoutY="354.0" prefWidth="150.0" />
         <Label layoutX="53.0" layoutY="303.0" text="Choose Country" />
         <Label fx:id="stateLabel" layoutX="22.0" layoutY="358.0" text="Choose State/Province" />
-        <Label layoutX="250.0" layoutY="75.0" text="User ID (Auto Generated:" />
+        <Label layoutX="250.0" layoutY="75.0" text="Customer ID (Auto Generated):" />
         <TextField fx:id="userIdTF" editable="false" layoutX="399.0" layoutY="71.0" prefHeight="25.0" prefWidth="69.0" />
     </children>
 </AnchorPane>
