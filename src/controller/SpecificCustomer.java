@@ -2,7 +2,6 @@ package controller;
 
 import DBAccess.DBAppointments;
 import DBAccess.DBCustomers;
-import Database.DBCustomerQueries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -29,71 +28,72 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** This class is the controller for the Specific Customer page. It is essentially a chart for the customer */
 public class SpecificCustomer implements Initializable {
 
+    /** This is the Text that will display the Customer's name */
     @FXML
     private Text nameText;
 
+    /** This is the Text that will display the Customer's ID */
     @FXML
     private Text customerIdText;
 
+    /** This is the Text that will display the Customer's phone number */
     @FXML
     private Text phoneText;
 
+    /** This is the TableView that will display all scheduled appointments for the specific customer */
     @FXML
     private TableView appointmentTable;
 
+    /** The column that displays the appointment start date and time */
     @FXML
     private TableColumn startCol;
 
+    /** The column that displays the appointment location */
     @FXML
     private TableColumn locationCol;
 
+    /** The column that displays the appointment ID*/
     @FXML
     private TableColumn apptIdCol;
 
+    /** The column that displays the appointment type */
     @FXML
     private TableColumn typeCol;
 
+    /** The column that displays the appointment description */
     @FXML
     private TableColumn descriptionCol;
 
+    /** The column that displays the appointment end date and time */
     @FXML
     private TableColumn endCol;
 
 
+    /** A list of all the appointments in the Database */
     ObservableList<Appointments> appointmentList = DBAppointments.getAllAppointments();
 
 
+    /** This method receives the Customer that was selected from the Customer Search Page.
+     * It then uses the Customer to display its information
+     * @param chosenCustomer The customer selected and passed from the Customer Search page
+     */
     public void populateTable(Customers chosenCustomer) {
 
         nameText.setText(chosenCustomer.getCustomerName());
         customerIdText.setText(String.valueOf(chosenCustomer.getCustomerId()));
         phoneText.setText(chosenCustomer.getPhone());
 
-        ObservableList<Appointments> customerAppointments = FXCollections.observableArrayList();
-
         fillTable(appointmentList);
-
-        /* for (Appointments a : appointmentList) {
-            if (a.getCustomerId() == chosenCustomer.getCustomerId()) {
-                //display appt info in table
-                customerAppointments.add(a);
-            }
-        }
-
-        appointmentTable.setItems(customerAppointments);
-        startCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-        locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        apptIdCol.setCellValueFactory(new PropertyValueFactory<>("apptId"));
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        descriptionCol.setCellValueFactory(new PropertyValueFactory<>("apptDescription"));
-        endCol.setCellValueFactory(new PropertyValueFactory<>("end")); */
-
     }
 
 
-
+    /** This method deletes the current customer from the database and returns the user to the Customer Search page.
+     *
+     * @param actionEvent Delete This Customer Account button is clicked
+     */
     @FXML
     public void onDeleteCustomer (ActionEvent actionEvent) throws SQLException {
         ObservableList<Customers> customerList = DBCustomers.getAllCustomers();
@@ -104,7 +104,7 @@ public class SpecificCustomer implements Initializable {
                 alert.setContentText("Delete this Customer?");
                 Optional<ButtonType> choice = alert.showAndWait();
                 if (choice.get() == ButtonType.OK) {
-                    DBCustomerQueries.delete(c);
+                    DBCustomers.delete(c);
                     Alert deletedAlert = new Alert(Alert.AlertType.INFORMATION);
                     deletedAlert.setTitle("Customer Deleted");
                     deletedAlert.setContentText("Customer ID: " + c.getCustomerId() + " (" + c.getCustomerName() + ") has been permanently deleted from the system");
@@ -129,6 +129,10 @@ public class SpecificCustomer implements Initializable {
         }
     }
 
+    /** This method opens the UpdateCustomer window and passes the current customer to the UpdateCustomer controller
+     *
+     * @param actionEvent Update Customer is clicked
+     */
     @FXML
     public void onUpdate (ActionEvent actionEvent) throws IOException {
 
@@ -136,7 +140,6 @@ public class SpecificCustomer implements Initializable {
 
 
         for (Customers c : customerList) {
-            //System.out.println("ID Check: " + c.getCustomerId() + " ID Text: " + Integer.parseInt(customerIdText.getText()));
             if (c.getCustomerId() == Integer.parseInt(customerIdText.getText())) {
                 try {
                     FXMLLoader loader = new FXMLLoader();
@@ -164,6 +167,11 @@ public class SpecificCustomer implements Initializable {
 
     }
 
+    /** Opens the AddAppointment window and passes in the current Customer ID, so that the appointment is scheduled correctly for the customer whose chart the user was in
+     * This differs from when the AddAppointment window is opened elsewhere, as the user can enter any Customer ID in that case.
+     *
+     * @param actionEvent Add Appointment button is clicked
+     */
     @FXML
     public void onAddAppointment (ActionEvent actionEvent) throws IOException {
 
@@ -182,6 +190,10 @@ public class SpecificCustomer implements Initializable {
 
     }
 
+    /** Opens the UpdateAppointment window and passes in the selected Appointment
+     *
+     * @param actionEvent Update Appointment button is clicked
+     */
     @FXML
     public void onUpdateAppointment (ActionEvent actionEvent) throws IOException {
 
@@ -208,12 +220,12 @@ public class SpecificCustomer implements Initializable {
 
     }
 
+    /** This method deletes the selected appointment from the database and calls the fillTable method to update the TableView
+     *
+     * @param actionEvent delete appointment button is clicked
+     */
     @FXML
     public void onDeleteAppointment (ActionEvent actionEvent) throws SQLException {
-
-        /* ObservableList<Appointments> appointmentList = DBAppointments.getAllAppointments();
-        Appointments ap = (Appointments) appointmentTable.getSelectionModel().getSelectedItem();
-        DBAppointments.deleteAppointment(ap.getApptId()); */
         try {
             if(!appointmentTable.getSelectionModel().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -244,6 +256,10 @@ public class SpecificCustomer implements Initializable {
 
     }
 
+    /** This method fills and updates the TableView with the current appointments in the Database associated with the specific customer
+     *
+     * @param remainingAppt A list of the remaining appointments in the database
+     */
     public void fillTable(ObservableList<Appointments> remainingAppt) {
 
         ObservableList<Appointments> customerAppointments = FXCollections.observableArrayList();
@@ -264,7 +280,7 @@ public class SpecificCustomer implements Initializable {
 
     }
 
-
+    /** This method returns the user to the Customer Search page */
     @FXML
     public void onClose (ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/CustomerPage.fxml"));
@@ -274,13 +290,15 @@ public class SpecificCustomer implements Initializable {
         stage.show();
     }
 
+    /** Initialize the screen. Ran everytime this screen is opened.
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
 
     }
-
-
-
 
 }

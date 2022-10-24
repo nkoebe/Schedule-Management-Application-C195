@@ -7,8 +7,13 @@ import model.FirstLevelDivisions;
 
 import java.sql.*;
 
+/** This class contains all the methods to send commands to the database regarding First Level Divisions */
 public class DBFirstLevelDivisions {
 
+    /** This method returns a List of all the First Level Divisions in the Database
+     *
+     * @return divisionsList
+     */
     public static ObservableList<FirstLevelDivisions> getAllDivisions() {
 
         ObservableList<FirstLevelDivisions> divisionsList = FXCollections.observableArrayList();

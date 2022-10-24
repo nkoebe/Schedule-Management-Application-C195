@@ -4,8 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
-
+/** This class established the connection with the Database */
 public abstract class DBConnection {
 
     private static final String protocol = "jdbc";
@@ -18,6 +17,7 @@ public abstract class DBConnection {
     private static String password = "Passw0rd!"; // Password
     public static Connection connection;  // Connection Interface
 
+    /** This class opens the connection */
     public static void openConnection()
     {
         try {
@@ -31,10 +31,12 @@ public abstract class DBConnection {
         }
     }
 
+    /** A getter for the connection */
     public static Connection getConnection() {
         return connection;
     }
 
+    /** This class closes the connection */
     public static void closeConnection() {
         try {
             connection.close();

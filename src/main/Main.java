@@ -20,11 +20,11 @@ import java.util.TimeZone;
 
 import static javafx.application.Application.launch;
 
-
+/** This is the main class. Will set the initial stage and present the LoginForm fxml. */
 public class Main extends Application {
 
 
-
+    /** This is where the LoginForm window is loaded, set, and shown */
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/view/LoginForm.fxml"));
@@ -35,15 +35,15 @@ public class Main extends Application {
         stage.setScene(new Scene(root, 600, 500));
         stage.show();
     }
-
+    /** Launches the application and opens/closes the Database connection.
+     *
+     * @param args
+     */
     public static void main(String[] args) {
-
-        //Locale.setDefault(new Locale("fr"));
 
         DBConnection.openConnection();
         launch(args);
         DBConnection.closeConnection();
-
 
     }
 }

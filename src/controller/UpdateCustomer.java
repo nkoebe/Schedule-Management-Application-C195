@@ -2,7 +2,6 @@ package controller;
 
 import DBAccess.DBCustomers;
 import DBAccess.DBFirstLevelDivisions;
-import Database.DBCustomerQueries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,9 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Customers;
@@ -25,41 +22,49 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/** This class is the controller for the UpdateCustomer window*/
 public class UpdateCustomer implements Initializable {
 
+    /** The TextField that the user will use to change the name of Customer */
     @FXML
     private TextField nameTF;
 
+    /** The TextField that the user will use to change the address of Customer */
     @FXML
     private TextField addressTF;
 
+    /** The TextField that the user will use to change the postal code of Customer */
     @FXML
     private TextField postalTF;
 
+    /** The TextField that the user will use to change the phone number of Customer */
     @FXML
     private TextField phoneTF;
 
-    @FXML
-    private Label stateLabel;
-
+    /** The TextField that the user will use to change the user ID associated with the Customer */
     @FXML
     private TextField userIdTF;
 
+    /** The Combo Box that the user will use to change which Country for the Customer */
     @FXML
     private ComboBox countryCombo;
 
+    /** The Combo Box that the user will use to change which First Level Division for the Customer */
     @FXML
     private ComboBox firstLevelCombo;
 
-
+    /** A list of all the first level divisions in the Database */
     ObservableList<FirstLevelDivisions> allDivisions = DBFirstLevelDivisions.getAllDivisions();
+    /** A list of the 3 Country options */
     ObservableList<String> countryOptions = FXCollections.observableArrayList("U.S.", "UK", "Canada");
+    /** A list of all the Customers in the database */
     ObservableList<Customers> allCustomers = DBCustomers.getAllCustomers();
 
-
-
+    /** This method receives the Customer from the previous window and uses it to populate all the information fields
+     *
+     * @param chosenCustomer the customer passed from the previous window
+     */
     public void populateFields(Customers chosenCustomer) {
-        System.out.println("Populate first");
         userIdTF.setText(String.valueOf(chosenCustomer.getCustomerId()));
         nameTF.setText(chosenCustomer.getCustomerName());
         addressTF.setText(chosenCustomer.getAddress());
@@ -101,6 +106,10 @@ public class UpdateCustomer implements Initializable {
 
     }
 
+    /** This method updates the choices available in the first level division combo box based on the selection in the Country Combo box
+     *
+     * @param actionEvent Select button is clicked
+     */
     @FXML
     public void onSelect (ActionEvent actionEvent) {
         ObservableList<String> firstLevel = FXCollections.observableArrayList();
@@ -131,6 +140,10 @@ public class UpdateCustomer implements Initializable {
 
     }
 
+    /** This method updates the customer in the Database with the information entered into the fields. Then returns the user to the Specific Customer page.
+     *
+     * @param actionEvent save button is clicked
+     */
     @FXML
     public void onSave (ActionEvent actionEvent) throws SQLException {
 
@@ -145,7 +158,7 @@ public class UpdateCustomer implements Initializable {
                         c.setDivisionId(f.getDivId());
                     }
                 }
-                DBCustomerQueries.update(c);
+                DBCustomers.update(c);
 
                 try {
                     FXMLLoader loader = new FXMLLoader();
@@ -169,6 +182,10 @@ public class UpdateCustomer implements Initializable {
 
     }
 
+    /** Returns the user to the Specific customer page without saving any changes
+     *
+     * @param actionEvent Cancel button is clicked
+     */
     @FXML
     public void onCancel (ActionEvent actionEvent) throws IOException {
 
@@ -200,7 +217,11 @@ public class UpdateCustomer implements Initializable {
         }
     }
 
-
+    /** Initialize the screen. Ran everytime this screen is opened. Populates the countryCombo ComboBox.
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         countryCombo.setItems(countryOptions);

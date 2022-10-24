@@ -12,8 +12,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+/** This class contains all the methods to send commands to the database regarding Contacts */
 public class DBContacts {
 
+    /** This method returns a list of all the Contacts in the Database
+     *
+     * @return contactList
+     */
     public static ObservableList<Contacts> getAllContacts() {
 
         ObservableList<Contacts> contactList = FXCollections.observableArrayList();

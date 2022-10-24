@@ -7,8 +7,13 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 
+/** This class contains all the methods to send commands to the database regarding Countries */
 public class DBCountries {
 
+    /** This method returns a list of all the Contacts in the Database
+     *
+     * @return cList
+     */
     public static ObservableList<Countries> getAllCountries() {
 
         ObservableList<Countries> clist = FXCollections.observableArrayList();
@@ -32,20 +37,4 @@ public class DBCountries {
 
         return clist;
     }
-
-    public static void checkDateConversion() {
-        System.out.println("CREATE DATE TEST");
-        String sql = "select Create_Date from countries";
-        try {
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()){
-                Timestamp ts = rs.getTimestamp("Create_Date");
-                System.out.println("CD: " + ts.toLocalDateTime().toString());
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
 }

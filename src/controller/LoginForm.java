@@ -26,36 +26,53 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import model.Users;
 
+/** This class controls the Login Window */
 public class LoginForm implements Initializable {
 
+    /** The text that labels the username TextField */
     @FXML
     private Text userNameText;
 
+    /** The text that labels the password TextField */
     @FXML
     private Text passwordText;
 
+    /** The text field where the user will enter their Username */
     @FXML
     private TextField userNameTF;
 
+    /** The text field where the user will enter their password */
     @FXML
     private TextField passwordTF;
 
+    /** The label that shows the Location and ZoneID of the User */
     @FXML
     private Label timeLabel;
 
+    /** The submit button */
     @FXML
     private Button submitButton;
 
+    /** The welcome text at the top of the window*/
     @FXML
     private Text welcomeText;
 
-    boolean passwordMatch = false;
-
+    /** A resource bundle used to translate this page to French or english based on the Locale of the user */
     ResourceBundle rb = ResourceBundle.getBundle("Translation/translate", Locale.getDefault());
 
+    /** This method verifies if both a username and a password are entered. It then searches the Database to verify if the information is correct.
+     * If it is correct, it opens the CustomerPage and passes the User ID to it.
+     * Each log in attempt is recorded in the login_activity.txt file.
+     *
+     * LAMBDA EXPRESSION #3
+     * This lambda expression again eliminated a for loop with multiple if statements within. The expression handles searching the database for the entered User and verifying that the
+     * password matches.
+     *
+     * @param actionEvent Submit button is clicked
+     *
+     * */
     public void onSubmit(ActionEvent actionEvent) throws IOException {
 
-            //Checks to make sure a Username and Password are both entered - Alert if not
             if (userNameTF.getText().isEmpty() || passwordTF.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle(rb.getString("inputAlertTitle"));
@@ -64,40 +81,13 @@ public class LoginForm implements Initializable {
                 return;
             }
 
-
-
             ObservableList<Users> userList = DBUsers.getAllUsers();
-
-            //Go through usernames in the list and compare to the entered text
-             /* for (Users u : userList) {
-                if (u.getName().equals(userNameTF.getText())) {
-                    //if found, compare this users password and the entered password
-                    if (u.getPassword().equals(passwordTF.getText())) {
-                        passwordMatch = true;
-
-                        FXMLLoader loader = new FXMLLoader();
-                        loader.setLocation(getClass().getResource("/view/CustomerPage.fxml"));
-                        loader.load();
-
-                        CustomerPage customerPageController = loader.getController();
-                        customerPageController.passUserId(u.getId());
-
-                        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                        Parent root = loader.getRoot();
-                        stage.setTitle("The Customer Search Page");
-                        stage.setScene(new Scene(root));
-                        stage.show();
-                    }
-                }
-            } */
 
             //Attempt at Lambda - above for loop - worked
             try {
                 Users currentUser = userList.stream().filter(u -> u.getName().equals(userNameTF.getText()) && u.getPassword().equals(passwordTF.getText())).findFirst().get();
-                passwordMatch = true;
 
                 String loginActivity = "C:/Users/noahk/IdeaProjects/demo/C195/login_activity.txt";
-                //Scanner keyboard = new Scanner(System.in);
                 FileWriter fWriter = new FileWriter(loginActivity, true);
                 PrintWriter pWriter = new PrintWriter(fWriter);
 
@@ -130,44 +120,17 @@ public class LoginForm implements Initializable {
                 alert.showAndWait();
             }
 
-
-
-
-
-
-            /* userList
-                    .stream()
-                    .filter(u -> u.getName().equals(userNameTF.getText()) && u.getPassword().equals(passwordTF.getText()))
-                    .findFirst()
-                    .get();
-
-
-
-
-
-
-             if (!passwordMatch) {
-                //If the password entered is incorrect, this alert will show up
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle(rb.getString("alertTitle"));
-                alert.setContentText(rb.getString("alertText"));
-                alert.showAndWait();
-            } */
-
     }
 
 
 
-
-
+    /** Initialize the screen. Ran everytime this screen is opened. Set's all the text to the correct language based on the users locale.
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println("I am initialized");
-
-        String locale = Locale.getDefault().toString();
-        System.out.println("locale " + locale);
-
-
 
         timeLabel.setText(rb.getString("location") + ": " + ZoneId.systemDefault());
         passwordText.setText(rb.getString("password"));
@@ -176,7 +139,6 @@ public class LoginForm implements Initializable {
         welcomeText.setText(rb.getString("welcome"));
         userNameTF.setPromptText(rb.getString("usernamePrompt"));
         passwordTF.setPromptText(rb.getString("passwordPrompt"));
-
 
     }
 

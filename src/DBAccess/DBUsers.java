@@ -7,8 +7,13 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 
+/** This class contains all the methods to send commands to the database regarding Users */
 public class DBUsers {
 
+    /** This method returns a List of all the Users in the Database
+     *
+     * @return uList
+     */
     public static ObservableList<Users> getAllUsers() {
 
         ObservableList<Users> ulist = FXCollections.observableArrayList();
